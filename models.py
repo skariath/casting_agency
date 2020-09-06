@@ -1,19 +1,20 @@
-from sqlalchemy import Column, String, create_engine, Table, Integer, ForeignKey
+from sqlalchemy import Column, String, create_engine, Table, Integer, ForeignKey, Date
 from flask_sqlalchemy import SQLAlchemy
 import json
 import os
+from datetime import date
 #from app import db
 
 
 
 db = SQLAlchemy()
 
-
+database_path = os.environ['DATABASE_URL']
 '''
 setup_db(app)
     binds a flask application and a SQLAlchemy service
 '''
-def setup_db(app, database_path):
+def setup_db(app,database_path=database_path):
     app.config.from_object(os.environ['APP_SETTINGS'])
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -26,6 +27,30 @@ def db_drop_and_create_all():
     can be used to initialize a clean database"""
     db.drop_all()
     db.create_all()
+    db_init_records()
+
+def db_init_records():
+    '''this will initialize the database with some test records.'''
+
+    new_actor = (Actors(
+        name = 'Brad Pitt',
+        gender = 'Male'
+        ))
+
+    new_movie = (Movies(
+        title = 'Fight Club',
+        release_date = date.today()
+        ))
+
+    new_relationship = movie_actor_relationship.insert().values(
+        movie_id = new_movie.id,
+        actor_id = new_actor.id
+    )
+
+    new_actor.insert()
+    new_movie.insert()
+    db.session.execute(new_relationship) 
+    db.session.commit()
 
 movie_actor_relationship = Table('movie_actor_relationship', db.Model.metadata,
                                 Column('movie_id', Integer, ForeignKey('movies.id')),
@@ -38,7 +63,7 @@ class Movies(db.Model):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(80), unique=True, nullable=False)
-    release_date = Column(Integer, nullable=False)
+    release_date = Column(Date, nullable=False)
 
     def __repr__(self):
         return f"<Movie {self.id} {self.title}>"
