@@ -25,9 +25,11 @@ To start and run the local development server,
 
 1. Initialize and activate a virtualenv:
 
-`$ virtualenv --no-site-packages env_castingagency`
+```
+$ virtualenv --no-site-packages env_castingagency
 
-`$ source env_castingagency/scripts/activate`
+$ source env_castingagency/scripts/activate
+```
 
 2. Install the dependencies:
 
@@ -358,16 +360,21 @@ Three roles with distinct permission sets have been already setup
 
 1. Casting Assistant:
 `GET /actors (read:actors)`: Can see all actors
+
 `GET /movies (read:movies)`: Can see all movies
 
 2. Casting Director (everything from Casting Assistant plus)
 `POST /actors (write:actors)`: Can create new Actors
+
 `PATCH /actors (update:actors)`: Can edit existing Actors
+
 `DELETE /actors (delete:actors)`: Can remove existing Actors from database
+
 `PATCH /movies (update:movies)`: Can edit existing Movies
 
 3. Exectutive Dircector (everything from Casting Director plus)
 `POST /movies (write:movies)`: Can create new Movies
+
 `DELETE /movies (delete:movies)`: Can remove existing Motives from database
 
 In your API Calls, add them as Header, with Authorization as key and the Bearer token as value. Don´t forget to also prepend Bearer to the token (seperated by space).
