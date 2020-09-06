@@ -24,10 +24,13 @@ Make sure you cd into the correct folder (with all app files) before following t
 To start and run the local development server,
 
 1. Initialize and activate a virtualenv:
+
 `$ virtualenv --no-site-packages env_castingagency`
+
 `$ source env_castingagency/scripts/activate`
 
 2. Install the dependencies:
+
 `$ pip install -r requirements.txt`
 This will install all of the required packages we selected within the `requirements.txt` file.
 
@@ -36,6 +39,7 @@ Running this project locally means that it can´t access Herokus env variables. 
 3. Change database config so it can connect to your local postgres database
 Open [setup.sh](setup.sh) with your editor of choice.
 Set database url as:
+
 `DATABASE_URL="postgres://<username>:<password>@<hostname>:<port>/<databasename>"`
 
 Just change username, password and port to whatever you choose while installing postgres.
@@ -46,12 +50,14 @@ databasename is the name of the database you created.
 If you chose to set up Auth0, modify the following with the new bearer tokens: 
 `ASSISTANT_TOKEN`, `DIRECTOR_TOKEN`, `PRODUCER_TOKEN`
 
-Please read Set Up Authentication to follow steps to set up Auth0
+Please scroll down to read Set Up Authentication to follow steps to set up Auth0
 
 5. Run the development server:
+
 `$ python app.py`
 
 To execute tests, run
+
 `$ python test_app.py`
 If you choose to run all tests, it should give this response if everything went fine:
 
@@ -73,8 +79,6 @@ Additionally, common pitfalls & error messages are explained, if applicable.
 ### Base URL
 https://sk-udacity-capstone.herokuapp.com
 
-### Authentification
-Please see API Authentification
 
 ### Available Endpoints
 #### 1. GET /actors
@@ -353,26 +357,27 @@ will return
 Three roles with distinct permission sets have been already setup
 
 1. Casting Assistant:
-GET /actors (read:actors): Can see all actors
-GET /movies (read:movies): Can see all movies
+`GET /actors (read:actors)`: Can see all actors
+`GET /movies (read:movies)`: Can see all movies
 
 2. Casting Director (everything from Casting Assistant plus)
-POST /actors (write:actors): Can create new Actors
-PATCH /actors (update:actors): Can edit existing Actors
-DELETE /actors (delete:actors): Can remove existing Actors from database
-PATCH /movies (update:movies): Can edit existing Movies
+`POST /actors (write:actors)`: Can create new Actors
+`PATCH /actors (update:actors)`: Can edit existing Actors
+`DELETE /actors (delete:actors)`: Can remove existing Actors from database
+`PATCH /movies (update:movies)`: Can edit existing Movies
 
 3. Exectutive Dircector (everything from Casting Director plus)
-POST /movies (write:movies): Can create new Movies
-DELETE /movies (delete:movies): Can remove existing Motives from database
+`POST /movies (write:movies)`: Can create new Movies
+`DELETE /movies (delete:movies)`: Can remove existing Motives from database
 
 In your API Calls, add them as Header, with Authorization as key and the Bearer token as value. Don´t forget to also prepend Bearer to the token (seperated by space).
 
 For example: (Bearer token for Executive Director)
-
+```
 {
     "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InYxaU54YnF6dDRFY0o0VDh6Zkw1RCJ9.eyJpc3MiOiJodHRwczovL2Rldi0zNDV1N3Itdy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY1MzNjZTIxNDYxNjEwMDZkMjYwNjY4IiwiYXVkIjoiY2FzdGluZ19hZ2VuY3kiLCJpYXQiOjE1OTkzODIxOTAsImV4cCI6MTU5OTQ2ODU5MCwiYXpwIjoiT2J5Wkp5R1A2QTZXMGRLTVJzbFNSYWoxcElTbXBMQ3QiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwicmVhZDphY3RvcnMiLCJyZWFkOm1vdmllcyIsInVwZGF0ZTphY3RvcnMiLCJ1cGRhdGU6bW92aWVzIiwid3JpdGU6YWN0b3JzIiwid3JpdGU6bW92aWVzIl19.XYBTTX2XMynZkg6Wu50p_zFOiCRtPcO1LUECX2F7BbMT_l8BZvGDrneZM129VUc2RB_w7TZHITlC83podoAJ8zY30uhJxgqGTS--Ef0RjQe7hWv79SVFnQ_gxLDkVMieiu2zdXFeO__qcLvEyOMNoIHL7LkAnSN5bbX6UBbuvK4-xD3e1uUdTJqyTwtg50ZmsV_qi78zFRSatQFu0s8SSBmt8UKJpX6OcKJOyC_fl5i7E1rY-x_E54-0pIUtJRPI_6GEKnHYbW3JxwyH_Bbqdp3Tl3FOZt_N998rOqH0iwIaJ4JFwIcjCXisz4pntNVkmMu0_Np4RvmcnpiSUJ6LFQ"
 }
+```
 
 ### Set Up Authentication
 All API Endpoints are decorated with Auth0 permissions. To use the project locally, you need to config Auth0 accordingly
