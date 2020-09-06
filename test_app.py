@@ -1,7 +1,7 @@
 import unittest
 import os
 from app import app, create_app
-from models import setup_db, db, Movies, Actors
+from models import setup_db, db, Movies, Actors, db_drop_and_create_all
 from flask_sqlalchemy import SQLAlchemy
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
@@ -24,8 +24,8 @@ def set_auth_header(role):
 
 class CastingTestCase(unittest.TestCase):
 
-    def setUp(self):
-        """Define test variables and initialize app."""
+    #def setUp(self):
+    #    """Define test variables and initialize app."""
         #self.app = create_app()
         #self.app = self.app.test_client
         #self.database_path = database_path
@@ -35,15 +35,31 @@ class CastingTestCase(unittest.TestCase):
         #db.init_app(app)
         #db.create_all()
 
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-        app.config['DEBUG'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = database_path
-        self.app = app.test_client()
-        db.drop_all()
-        db.create_all()
+        #app.config['TESTING'] = True
+        #app.config['WTF_CSRF_ENABLED'] = False
+        #app.config['DEBUG'] = False
+        #app.config['SQLALCHEMY_DATABASE_URI'] = database_path
+        #self.app = app.test_client()
+        #db.drop_all()
+        #db.create_all()
         #setup_db(self.app, self.database_path)
 
+        # binds the app to the current context
+        #with self.app.app_context():
+        #    self.db = SQLAlchemy()
+        #    self.db.init_app(self.app)
+            # create all tables
+        #    self.db.create_all()
+    
+    def setUp(self):
+        """Define test variables and initialize app."""
+
+        self.app = create_app()
+        self.client = self.app.test_client
+        self.database_path = os.environ['DATABASE_URL']
+        setup_db(self.app, self.database_path)
+        self.app = app.test_client()
+        db_drop_and_create_all()
         # binds the app to the current context
         #with self.app.app_context():
         #    self.db = SQLAlchemy()
@@ -55,7 +71,7 @@ class CastingTestCase(unittest.TestCase):
         """Executed after reach test"""
         pass
 
-    # movies endpoint tests
+    # endpoint tests
 
     def test_get_movies(self):
         res = self.app.get(

@@ -3,7 +3,7 @@ from flask import Flask, request, abort, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from auth import AuthError, requires_auth
-from models import setup_db, Actors, Movies
+from models import setup_db, Actors, Movies, db_drop_and_create_all
 
 def create_app(test_config=None):
   # create and configure the app
@@ -23,11 +23,11 @@ app = create_app()
 
 database_path = os.environ['DATABASE_URL']
 setup_db(app,database_path)
-# db_drop_and_create_all()
+#db_drop_and_create_all()
 
 @app.route('/')
-def hello():
-    return "Hello World!"
+def index():
+    return render_template('login.html')
 
 @app.route('/login')
 def login():
@@ -137,8 +137,9 @@ def get_all_actors(payload):
 @app.route('/actors', methods=['POST'])
 @requires_auth('write:actors')
 def add_actor(payload):
-    name = request.get_json().get('name')
-    gender = request.get_json().get('gender')
+    data = request.get_json()
+    name = data.get('name')
+    gender = data.get('gender')
     try:
         data = name and gender
         if not data:
