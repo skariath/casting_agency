@@ -1,10 +1,5 @@
 # Capstone Project - Casting Agency
 ### Udacity Full Stack Nano Degree 
-Content
-Motivation
-Start Project locally
-API Documentation
-Authentification
 
 ## About
 Casting Agency application models a company that is responsible for producing movies as well as managing and assigning actors to those movies.
@@ -27,7 +22,6 @@ To start and run the local development server,
 
 ```
 $ virtualenv --no-site-packages env_castingagency
-
 $ source env_castingagency/scripts/activate
 ```
 
