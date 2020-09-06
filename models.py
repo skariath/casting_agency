@@ -1,26 +1,30 @@
-from sqlalchemy import Column, String, create_engine, Table, Integer, ForeignKey, Date
+from sqlalchemy import Column, String, create_engine
+from sqlalchemy import Table, Integer, ForeignKey, Date
 from flask_sqlalchemy import SQLAlchemy
 import json
 import os
 from datetime import date
-#from app import db
-
 
 
 db = SQLAlchemy()
 
 database_path = os.environ['DATABASE_URL']
+
+
 '''
 setup_db(app)
     binds a flask application and a SQLAlchemy service
 '''
-def setup_db(app,database_path=database_path):
+
+
+def setup_db(app, database_path=database_path):
     app.config.from_object(os.environ['APP_SETTINGS'])
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
     db.create_all()
+
 
 def db_drop_and_create_all():
     """drops the database tables and starts fresh
@@ -29,36 +33,36 @@ def db_drop_and_create_all():
     db.create_all()
     db_init_records()
 
+
 def db_init_records():
     '''this will initialize the database with some test records.'''
 
-    new_actor = (Actors(
-        name = 'Brad Pitt',
-        gender = 'Male'
-        ))
+    new_actor = (Actors(name='Brad Pitt', gender='Male'))
 
-    new_movie = (Movies(
-        title = 'Fight Club',
-        release_date = date.today()
-        ))
+    new_movie = (Movies(title='Fight Club', release_date=date.today()))
 
     new_relationship = movie_actor_relationship.insert().values(
-        movie_id = new_movie.id,
-        actor_id = new_actor.id
+        Movie_id=new_movie.id,
+        Actor_id=new_actor.id,
     )
 
     new_actor.insert()
     new_movie.insert()
-    db.session.execute(new_relationship) 
+    db.session.execute(new_relationship)
     db.session.commit()
 
-movie_actor_relationship = Table('movie_actor_relationship', db.Model.metadata,
-                                Column('movie_id', Integer, ForeignKey('movies.id')),
-                                Column('actor_id', Integer, ForeignKey('actors.id')))
+
+# Table to capture the N:N relationship between movies and actors
+movie_actor_relationship = db.Table(
+    'movie_actor_relationship',
+    db.Model.metadata,
+    db.Column('movie_id', db.Integer, db.ForeignKey('movies.id')),
+    db.Column('actor_id', db.Integer, db.ForeignKey('actors.id'))
+)
 
 
 class Movies(db.Model):
-    
+
     __tablename__ = "movies"
 
     id = Column(Integer, primary_key=True)
@@ -96,7 +100,7 @@ class Movies(db.Model):
 
 
 class Actors(db.Model):
-  
+
     __tablename__ = "actors"
 
     id = Column(Integer, primary_key=True)
